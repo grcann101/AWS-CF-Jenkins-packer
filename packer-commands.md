@@ -1,0 +1,5 @@
+
+
+packer validate example.json
+
+

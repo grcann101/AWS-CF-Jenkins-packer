@@ -1,0 +1,27 @@
+{
+    "variables": {
+      "aws_access_key": "AWS_ACCESS_KEY_ID",
+      "aws_secret_key": "AWS_SECRET_ACCESS_KEY",
+      "build_script": "build_script"
+    },
+    "builders": [
+      {
+        "type": "amazon-ebs",
+        "access_key": "{{user `aws_access_key`}}",
+        "secret_key": "{{user `aws_secret_key`}}",
+        "region": "eu-west-2",
+        "source_ami": "ami-fce3c696",
+        "instance_type": "t2.micro",
+        "ssh_username": "ec2-user",
+        "ami_name": "packer-az2 {{timestamp}}"
+      }
+    ],
+    "provisioners": [
+        {
+          "type": "shell",
+          "script": "./build.sh"
+        }
+      ]
+    
+  }
+  

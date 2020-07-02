@@ -1,0 +1,58 @@
+[
+    {
+      "ParameterKey": "VPC",
+      "ParameterValue": "vpc-94ffb8fc"
+    }, 
+    {
+      "ParameterKey": "SCPUSER",
+      "ParameterValue": "scpuser"
+    },
+    {
+        "ParameterKey": "SSHKeyName",
+        "ParameterValue": "jenkins_key"
+    },
+    {
+        "ParameterKey": "ImageID",
+        "ParameterValue": "ami-03603cffd09f888ee"
+      }, 
+      {
+        "ParameterKey": "InstanceType",
+        "ParameterValue": "t3.micro"
+      },
+      {
+          "ParameterKey": "ASGDesiredCapacity",
+          "ParameterValue": "1"
+      },
+      {
+        "ParameterKey": "EC2Subnets",
+        "ParameterValue": "subnet-a0e63dec,subnet-f12cb98b"
+      }, 
+      { 
+        "ParameterKey": "EC2Name",
+        "ParameterValue": "Jenkins"
+      },
+      {
+          "ParameterKey": "InternetSecurityGroup",
+          "ParameterValue": ""
+      },
+      {
+          "ParameterKey": "prefixname",
+          "ParameterValue": "gcops-jenkins"
+        }, 
+        {
+          "ParameterKey": "VolumeName",
+          "ParameterValue": "efs-jenkins-volume1"
+        },
+        {
+            "ParameterKey": "PrivateSubnetA",
+            "ParameterValue": "subnet-f12cb98b"
+        }, 
+        {
+            "ParameterKey": "PrivateSubnetB",
+            "ParameterValue": "subnet-a0e63dec"
+        }, 
+        {
+            "ParameterKey": "Environment",
+            "ParameterValue": "Sandbox"
+        }   
+]
