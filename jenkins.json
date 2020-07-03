@@ -4,6 +4,10 @@
       "ParameterValue": "vpc-94ffb8fc"
     }, 
     {
+      "ParameterKey": "myip",
+      "ParameterValue": "46.69.29.82/32"
+    }, 
+    {
       "ParameterKey": "SCPUSER",
       "ParameterValue": "scpuser"
     },

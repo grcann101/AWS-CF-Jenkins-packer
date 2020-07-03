@@ -29,6 +29,11 @@ Parameters:
     Type: String
     Default: t3.micro
 
+  myip:
+    Description: security group ip address 
+    Type: String
+    Default: 0.0.0.0/0
+
   ASGDesiredCapacity:
     Description: The number of EC2 instances lauched into the AutoScaling Group
     Type: String
@@ -158,13 +163,13 @@ Resources:
         IpProtocol: tcp
         FromPort: 80
         ToPort: 80
-        CidrIp: 95.146.64.14/32
+        CidrIp: !Ref myip
         Description: DNS Port
       -
         IpProtocol: tcp
         FromPort: 443
         ToPort: 443
-        CidrIp: 95.146.64.14/32 
+        CidrIp: !Ref myip 
         Description: DNS Port
       Tags: 
         -
@@ -311,13 +316,13 @@ Resources:
         IpProtocol: tcp
         FromPort: 22
         ToPort: 22
-        CidrIp: 95.146.64.14/32
+        CidrIp: !Ref myip
         Description: SSH Port
       -
         IpProtocol: tcp
         FromPort: 80
         ToPort: 80
-        CidrIp: 95.146.64.14/32
+        CidrIp: !Ref myip
         Description: http  Port
       Tags: 
         -
