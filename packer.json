@@ -14,7 +14,8 @@
       "instance_type": "t2.micro",
       "ssh_username": "ec2-user",
       "ami_name": "packer-az2 {{timestamp}}",
-      "security_group_id": "sg-0a533f90b1ab67030"
+      "security_group_id": "sg-0a533f90b1ab67030",
+      "ssh_timeout": "10m"
     }
   ],
   "provisioners": [
