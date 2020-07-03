@@ -20,7 +20,7 @@
   "provisioners": [
       {
         "type": "shell",
-        "script": "{{packer_build_script`}}"
+        "script": "{{packer_build_script}}"
       }
     ]
   
