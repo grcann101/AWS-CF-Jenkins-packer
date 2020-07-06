@@ -524,6 +524,8 @@ Resources:
               command:  "sudo yum install java -y"
             C-install_jenkins:
               command:  "sudo yum install jenkins -y"
+            D-sudo_jenkins:
+              command:  "sudo sed 's/## Allow root to run any commands anywhere/jenkins ALL=(ALL) NOPASSWD: ALL/g' /etc/sudoers"
         configure_git:
           commands:
             A-create_git:
