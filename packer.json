@@ -16,7 +16,7 @@
       "ami_name": "packer-az2 {{timestamp}}",
       "security_group_id": "sg-0a533f90b1ab67030",
       "ssh_timeout": "10m",
-      "subnet_id": "subnet-a0e63dec"
+      "subnet_id": "subnet-f12cb98b"
     }
   ],
   "provisioners": [
