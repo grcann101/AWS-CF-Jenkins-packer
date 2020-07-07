@@ -1,16 +1,22 @@
 ls -la ;
 which packer;
-#!/usr/bin/env bash
-# Script prerequisite > install jq > https://stedolan.github.io
-# ********************************************************************************************
-# UPDATE: Check out Robert's repo here https://github.com/robertpeteuil/terraform-installer
-#   Robert's repo is more built out and has more options around the installation process.
-#   Cheers!  -Adron
-# ********************************************************************************************
+# previous build steps 
+#  check box this build is parameterized   setup parameter build_script
+# check box SCM GIT add repo and setup access key in github
+# check box Build Environment  use secret text or files and add AWS keys
+# Build step copy this code into the build step box type execute Shell script
 
-wget -O jq https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64
-sudo chmod +x ./jq
-sudo cp jq /usr/bin
+
+
+# Install Packer and terraform if not installed perviously
+
+if [ -f "/usr/bin/jq" ]; then
+    echo "jq exists."
+else
+    wget -O jq https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64
+    sudo chmod +x ./jq
+    sudo cp jq /usr/bin
+fi
 # Get URLs for most recent versions
 # For Linux
 
@@ -39,11 +45,17 @@ else
     unzip packer.zip
 fi
 
+# ensure logs are visible
+
 export PACKER_LOG=1;
 export PACKER_LOG_PATH=$WORKSPACE/packer.log;
 echo "packer log path:" $PACKER_LOG_PATH;
-sudo ./packer -machine-readable version
-sudo ./packer build ./packer.json -var aws_access_key=$AWS_ACCESS_KEY_ID -var aws_secret_key=$AWS_SECRET_ACCESS_KEY -var packer_build=$build_script ;
+sudo ./packer -machine-readable version ;
+
+# run the packer build ami 
+
+sudo ./packer build -var aws_access_key=$AWS_ACCESS_KEY_ID -var aws_secret_key=$AWS_SECRET_ACCESS_KEY -var packer_build_script=$build_script ./packer.json ;
+
 echo 'end of run;'
 ls -la
 

@@ -29,7 +29,7 @@ aws cloudformation update-stack --stack-name jenkins --template-body file://cf-s
 
 # Files
 
-| --- | --- |
+
 |File |Description |  
 | --- | --- | 
 |cf-jenkins-server-stack.yml | CF code to build service | 
