@@ -35,7 +35,7 @@ aws cloudformation update-stack --stack-name jenkins --template-body file://cf-j
 |cf-jenkins-server-stack.yml | CF code to build service | 
 |jenkins.json | CF Parameters for the above stack | 
 |packer.json | Packer Command to build the AMI | 
-|build_script.sh | Software install for the LAMP stack | 
+|lamp-install-script.sh | Software install for the LAMP stack | 
 |jenkins-pipe-packer-go | Jenkins pipeline to Run the build |
 
 
