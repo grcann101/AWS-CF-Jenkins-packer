@@ -53,3 +53,14 @@ mount -t efs fs-a999999.efs.eu-west-2.amazonaws.com:/ /var/lib/jenkins
 umount /efs
 ```
 
+## Jenkins Project Setup
+
+New Item freestyle project
+
+1 check box this build is parameterized   setup parameter build_script to lamp-install-script.sh
+2 check box SCM GIT add repo and setup access key in github
+3 check box Build Environment  use secret text or files and add AWS keys
+4 Build step copy jenkins-pipe-packer-go code into the build step box type execute Shell script
+5 Save and run the build.
+
+
