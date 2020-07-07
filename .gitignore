@@ -3,6 +3,10 @@
 ## windows bat
 *.bat
 
+# pdf
+
+*.pdf 
+
 ## Certificate Authority
 *.ca
 
