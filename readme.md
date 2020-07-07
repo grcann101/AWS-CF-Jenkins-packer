@@ -30,13 +30,14 @@ aws cloudformation update-stack --stack-name jenkins --template-body file://cf-s
 # Files
 
 | --- | --- |
-|cf-jenkins-server-stack.yml | CF code to build service | 
+|File |Description |  
 | --- | --- | 
+|cf-jenkins-server-stack.yml | CF code to build service | 
 |jenkins.json | CF Parameters for the above stack | 
 |packer.json | Packer Command to build the AMI | 
 |build_script.sh | Software install for the LAMP stack | 
 |jenkins-pipe-packer-go | Jenkins pipeline to Run the build |
-| --- | --- |
+
 
 
 
@@ -46,9 +47,9 @@ cat /var/log/cfn-init-cmd.log
 
 
 ## Example mount Commands for the efs
-
+```
 mount -t efs fs-a999999.efs.eu-west-2.amazonaws.com:/ /var/lib/jenkins
 
 umount /efs
-
+```
 
