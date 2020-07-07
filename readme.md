@@ -10,21 +10,21 @@
 
 ## -validate----------
 ```
-aws cloudformation validate-template --template-body file://F:\AWS\jenkins-server\cf-scp-server-stack.yml
+aws cloudformation validate-template --template-body file://F:\AWS\jenkins-server\cf-jenkins-server-stack.yml
 ```
 
 ## -create stack --------------------
 ```
-aws cloudformation create-stack --stack-name jenkins --template-body file://cf-scp-server-stack.yml --parameters  file://jenkins.json --capabilities CAPABILITY_IAM 
+aws cloudformation create-stack --stack-name jenkins --template-body file://cf-jenkins-server-stack.yml --parameters  file://jenkins.json --capabilities CAPABILITY_IAM 
 ```
 ## -change set --------------------
 ```
-aws cloudformation create-change-set --change-set-name secgroup --stack-name jenkins --template-body file://cf-scp-server-stack.yml --parameters  file://jenkins.json --capabilities CAPABILITY_IAM 
+aws cloudformation create-change-set --change-set-name secgroup --stack-name jenkins --template-body file://cf-jenkins-server-stack.yml --parameters  file://jenkins.json --capabilities CAPABILITY_IAM 
 ```
 
 ## -update stack --------------------
 ```
-aws cloudformation update-stack --stack-name jenkins --template-body file://cf-scp-server-stack.yml --parameters  file://jenkins.json --capabilities CAPABILITY_IAM 
+aws cloudformation update-stack --stack-name jenkins --template-body file://cf-jenkins-server-stack.yml --parameters  file://jenkins.json --capabilities CAPABILITY_IAM 
 ```
 
 # Files
