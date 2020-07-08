@@ -1,14 +1,15 @@
 ls -la ;
 which packer;
-# previous build steps 
-#  check box this build is parameterized   setup parameter build_script
+#!/usr/bin/env bash
+
+# Select Jenkins free form project then add these steps 
+# check box this build is parameterized   setup parameter build_script
 # check box SCM GIT add repo and setup access key in github
 # check box Build Environment  use secret text or files and add AWS keys
 # Build step copy this code into the build step box type execute Shell script
 
 
-
-# Install Packer and terraform if not installed perviously
+# Install JQ 
 
 if [ -f "/usr/bin/jq" ]; then
     echo "jq exists."
@@ -45,17 +46,11 @@ else
     unzip packer.zip
 fi
 
-# ensure logs are visible
-
 export PACKER_LOG=1;
 export PACKER_LOG_PATH=$WORKSPACE/packer.log;
 echo "packer log path:" $PACKER_LOG_PATH;
 sudo ./packer -machine-readable version ;
-
-# run the packer build ami 
-
-sudo ./packer build -var aws_access_key=$AWS_ACCESS_KEY_ID -var aws_secret_key=$AWS_SECRET_ACCESS_KEY -var packer_build_script=$build_script ./packer.json ;
-
+sudo ./packer build -var aws_access_key=$AWS_ACCESS_KEY_ID -var aws_secret_key=$AWS_SECRET_ACCESS_KEY -var packer_build_script=$build_script -var source-ami=$sourceami -var ami-name=$aminame -var region=$region -var sec-group=$secgroup ./packer.json ;
 echo 'end of run;'
 ls -la
 
