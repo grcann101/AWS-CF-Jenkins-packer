@@ -24,7 +24,7 @@ resource "aws_instance" "rancher-instance-1" { # end of resource block
   instance_type = var.rancher-type
   subnet_id     = aws_subnet.rancher-a.id
   key_name      = var.rancher-key
-  security_groups             = [aws_security_group.rancher-sg.id]
+  security_groups             = [module.server_sg.this_security_group_id]
   iam_instance_profile        = var.rancher-iam
   associate_public_ip_address = true
 
@@ -53,7 +53,7 @@ resource "aws_instance" "rancher-instance-2" { # end of resource block
   instance_type = var.rancher-type
   subnet_id     = aws_subnet.rancher-b.id
   key_name      = var.rancher-key
-  security_groups             = [aws_security_group.rancher-sg.id]
+  security_groups             = [module.server_sg.this_security_group_id]
   iam_instance_profile        = var.rancher-iam
   associate_public_ip_address = true
 
@@ -82,7 +82,7 @@ resource "aws_instance" "rancher-instance-3" { # end of resource block
   instance_type = var.rancher-type
   subnet_id     = aws_subnet.rancher-c.id
   key_name      = var.rancher-key
-  security_groups             = [aws_security_group.rancher-sg.id]
+  security_groups             = [module.server_sg.this_security_group_id]
   iam_instance_profile        = var.rancher-iam
   associate_public_ip_address = true
 
@@ -110,7 +110,7 @@ resource "aws_instance" "rancher-bastion-london" { # end of resource block
   instance_type = var.rancher-type
   subnet_id     = aws_subnet.rancher-c.id
   key_name      = var.rancher-key
-  security_groups             = [aws_security_group.rancher-sg.id]
+  security_groups             = [module.server_sg.this_security_group_id]
   iam_instance_profile        = var.rancher-iam
   associate_public_ip_address = true
 

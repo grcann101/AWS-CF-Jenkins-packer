@@ -127,7 +127,9 @@ variable "az3" { # az for subnet c
 variable "rancher-vpc-cidr" { # cidr for the subnet in az 1a give 256 addresses
   default = "172.31.0.0/16"
 }
-
+variable "vpc-id" { # cidr for the subnet in az 1a give 256 addresses
+  default = "vpc-94ffb8fc"
+}
 
 variable "cidr-az1" { # cidr for the subnet in az 1a give 256 addresses
   default = "172.31.16.0/20"
