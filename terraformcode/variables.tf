@@ -1,7 +1,7 @@
 #-------------------------------------------------------------------------------
 #  Variables for Rancher V2
 #  created by Graham Cann 29/05/2018
-#  update for jet2 23/01/2019
+#  update for moorit 23/01/2019
 #  added helm vars GC 30/05/2019
 #-------------------------------------------------------------------------------
 
@@ -46,10 +46,10 @@ variable "label-az3" {
 }
 
 variable "rancher-ami" { #  rancher 1.5.1
-  default = "ami-08c80bfb26ba9edbe"
+  default = "ami-00d503d7ef22da04a"
 }
 variable "rancher-bastion-ami" { #  bastion CIS hardened AMI
-  default = "ami-00aa66cce9a0c671f"
+  default = "ami-03603cffd09f888ee"
 }
 variable "rancher-type" { # aws instance type
   default = "t2.micro"
@@ -83,19 +83,19 @@ variable "route53-hosted-zone" { # entries under the .cloud have this hosted zon
 }
 
 variable "route53-name" { # route53 a record name
-  default = "rancherlon.jet2.cloud"
+  default = "rancherlon.moorit.cloud"
 }
 variable "route53-name-vault" { # route53 a record name
-  default = "vaultlon.jet2.cloud"
+  default = "vaultlon.moorit.cloud"
 }
 variable "route53-name-jenkins" { # route53 a record name
-  default = "jenkinslon.jet2.cloud"
+  default = "jenkinslon.moorit.cloud"
 }
 variable "route53-name-aqua" { # route53 a record name
-  default = "aqualon.jet2.cloud"
+  default = "aqualon.moorit.cloud"
 }
 variable "route53-name-consul" { # route53 a record name
-  default = "consullon.jet2.cloud"
+  default = "consullon.moorit.cloud"
 }
 
 variable "lb-name" { # load balancer a record name
@@ -125,20 +125,20 @@ variable "az3" { # az for subnet c
   default = "eu-west-2c"
 }
 variable "rancher-vpc-cidr" { # cidr for the subnet in az 1a give 256 addresses
-  default = "10.10.0.0/16"
+  default = "172.31.0.0/16"
 }
 
 
 variable "cidr-az1" { # cidr for the subnet in az 1a give 256 addresses
-  default = "10.10.10.0/24"
+  default = "172.31.16.0/20"
 }
 
 variable "cidr-az2" { # cidr for the subnet in az 1b
-  default = "10.10.20.0/24"
+  default = "172.31.32.0/20"
 }
 
 variable "cidr-az3" { # cidr for the subnet in az 1c
-  default = "10.10.30.0/24"
+  default = "172.31.0.0/20"
 }
 
 variable "cidr-bastion-az3" { # cidr for the subnet in az 1c bastion
@@ -169,9 +169,6 @@ variable "rancher-tls-cert-arn" { # arn for the tls certificate installed or via
 #-------------------------------------------------------------------------------
 #aws variables to change docker to a supported version for rancher
 #-------------------------------------------------------------------------------
-variable "rancher-docker" {
-  default = "sudo ros engine switch docker-17.03.2-ce "
-}
 
 variable "rancher-user" {
   default = "rancher"
@@ -193,7 +190,7 @@ variable "rancher-pcert" {
 # logging variables
 #-------------------------------------------------------------------------------
 variable "rancher-lb-log" { # bucket for the load balancer log files
-  default = "rancher-v2-logs-jet2.cloud"
+  default = "rancher-v2-logs-moorit.cloud"
 }
 
 #------------------
