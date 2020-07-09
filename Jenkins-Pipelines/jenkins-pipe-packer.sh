@@ -1,5 +1,5 @@
 ls -la ;
-which packer;
+
 #!/usr/bin/env bash
 
 # Select Jenkins free form project then add these steps 
@@ -10,39 +10,14 @@ which packer;
 # By Graham Cann  works 02/07/2020
 
 
-# Install JQ 
-
-if [ -f "/usr/bin/jq" ]; then
-    echo "jq exists."
-else
-    wget -O jq https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64
-    sudo chmod +x ./jq
-    sudo cp jq /usr/bin
-fi
-# Get URLs for most recent versions
-# For Linux
-
-terraform_url=$(curl https://releases.hashicorp.com/index.json | jq '{terraform}' | egrep "linux.*amd64" | sort --version-sort -r | head -1 | awk -F[\"] '{print $4}')
-packer_url=$(curl https://releases.hashicorp.com/index.json | jq '{packer}' | egrep "linux.*amd64" | sort --version-sort -r | head -1 | awk -F[\"] '{print $4}')
-
-
-
-# Download Terraform. URI: https://www.terraform.io/downloads.html
-if [ -f "./terraform" ]; then
-    echo "terraform exists."
-else 
-    echo "Downloading $terraform_url."
-	curl -o terraform.zip $terraform_url
-	# Unzip and install
-	unzip terraform.zip
-fi
+# download packer from the hasicorp site if not already downloaded
 
 if [ -f "./packer" ]; then
     echo "packer exists."
 else 
     # Download Packer. URI: https://www.packer.io/downloads.html
-    echo "Downloading $packer_url."
-    curl -o packer.zip $packer_url
+    echo "Downloading Packer $version "
+    curl -o packer.zip https://releases.hashicorp.com/packer/$version/packer_$version/_linux_amd64.zip / 
     # Unzip and install
     unzip packer.zip
 fi
@@ -51,10 +26,13 @@ export PACKER_LOG=1;
 export PACKER_LOG_PATH=$WORKSPACE/packer.log;
 echo "packer log path:" $PACKER_LOG_PATH;
 
+# show packer version
 sudo ./packer -machine-readable version ;
 
+# run packer build 
 sudo ./packer build -var aws_access_key=$AWS_ACCESS_KEY_ID -var aws_secret_key=$AWS_SECRET_ACCESS_KEY -var packer_build_script=$build_script -var source-ami=$sourceami -var ami-name=$aminame -var region=$region -var sec-group=$secgroup ./packercode/packer.json ;
-echo 'end of Packer Build;'
+
+echo 'end of Packer Build AMI ;'
 ls -la
 
 
