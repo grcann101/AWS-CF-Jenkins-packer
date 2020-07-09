@@ -1,47 +1,47 @@
 <?xml version='1.1' encoding='UTF-8'?>
 <project>
   <actions/>
-  <description>Packer build to create AMI </description>
+  <description>Run Terraform to build infrastructure</description>
   <keepDependencies>false</keepDependencies>
   <properties>
     <hudson.model.ParametersDefinitionProperty>
       <parameterDefinitions>
-        <hudson.model.StringParameterDefinition>
-          <name>build_script</name>
-          <description>software install script for LAMP stack</description>
-          <defaultValue>lamp-install-script.sh</defaultValue>
-          <trim>true</trim>
-        </hudson.model.StringParameterDefinition>
-        <hudson.model.StringParameterDefinition>
-          <name>secgroup</name>
-          <description>security group to run packer in</description>
-          <defaultValue>sg-0a533f90b1ab67030</defaultValue>
-          <trim>false</trim>
-        </hudson.model.StringParameterDefinition>
-        <hudson.model.StringParameterDefinition>
-          <name>aminame</name>
-          <description>prefix for AMI name</description>
-          <defaultValue>packer-az2-lamp</defaultValue>
-          <trim>false</trim>
-        </hudson.model.StringParameterDefinition>
-        <hudson.model.StringParameterDefinition>
-          <name>sourceami</name>
-          <description>amazon linux 2 source ami for the build</description>
-          <defaultValue>ami-03603cffd09f888ee</defaultValue>
-          <trim>false</trim>
-        </hudson.model.StringParameterDefinition>
-        <hudson.model.StringParameterDefinition>
-          <name>region</name>
-          <description>region to build in</description>
-          <defaultValue>eu-west-2</defaultValue>
-          <trim>false</trim>
-        </hudson.model.StringParameterDefinition>
-        <hudson.model.StringParameterDefinition>
+        <hudson.model.ChoiceParameterDefinition>
+          <name>action</name>
+          <description>Plan or Apply action</description>
+          <choices class="java.util.Arrays$ArrayList">
+            <a class="string-array">
+              <string>plan</string>
+              <string>apply</string>
+            </a>
+          </choices>
+        </hudson.model.ChoiceParameterDefinition>
+        <hudson.model.ChoiceParameterDefinition>
           <name>version</name>
-          <description>Packer Version to run</description>
-          <defaultValue>1.6.0</defaultValue>
+          <description>Terraform Version to Use</description>
+          <choices class="java.util.Arrays$ArrayList">
+            <a class="string-array">
+              <string>0.12.28</string>
+              <string>0.12.26</string>
+            </a>
+          </choices>
+        </hudson.model.ChoiceParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>directory</name>
+          <description>directory for tf scripts</description>
+          <defaultValue>./terraformcode</defaultValue>
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
+        <hudson.model.ChoiceParameterDefinition>
+          <name>region</name>
+          <description></description>
+          <choices class="java.util.Arrays$ArrayList">
+            <a class="string-array">
+              <string>eu-west-2</string>
+              <string>eu-west-1</string>
+            </a>
+          </choices>
+        </hudson.model.ChoiceParameterDefinition>
       </parameterDefinitions>
     </hudson.model.ParametersDefinitionProperty>
   </properties>
@@ -71,7 +71,7 @@
   <builders>
     <hudson.tasks.Shell>
       <command>ls -la ;
-
+which packer;
 #!/usr/bin/env bash
 
 # Select Jenkins free form project then add these steps
@@ -79,32 +79,33 @@
 # check box SCM GIT add repo and setup access key in github
 # check box Build Environment  use secret text or files and add AWS keys
 # Build step copy this code into the build step box type execute Shell script
-# By Graham Cann  works 02/07/2020
+# By Graham Cann works 08/07/2020
 
 
-# download packer from the hasicorp site if not already downloaded
 
-if [ -f &quot;./packer&quot; ]; then
-    echo &quot;packer exists.&quot;
+
+# Download Terraform if module does not exits already
+
+if [ -f &quot;./terraform&quot; ]; then
+    echo &quot;terraform exists.&quot;
 else
-    # Download Packer. URI: https://www.packer.io/downloads.html
-    echo &quot;Downloading Packer $version &quot;
-    curl -o packer.zip https://releases.hashicorp.com/packer/$version/packer_$version/_linux_amd64.zip /
-    # Unzip and install
-    unzip packer.zip
+        echo &quot;Downloading $terraform_url.&quot;
+        curl -o terraform.zip https://releases.hashicorp.com/terraform/$version/terraform_$version\_linux_amd64.zip\
+        # Unzip and install
+        unzip terraform.zip
 fi
+# initalize terraform
 
-export PACKER_LOG=1;
-export PACKER_LOG_PATH=$WORKSPACE/packer.log;
-echo &quot;packer log path:&quot; $PACKER_LOG_PATH;
+./terraform -version
+./terraform init $directory
 
-# show packer version
-sudo ./packer -machine-readable version ;
+# run the plan  or apply
 
-# run packer build
-sudo ./packer build -var aws_access_key=$AWS_ACCESS_KEY_ID -var aws_secret_key=$AWS_SECRET_ACCESS_KEY -var packer_build_script=$build_script -var source-ami=$sourceami -var ami-name=$aminame -var region=$region -var sec-group=$secgroup ./packercode/packer.json ;
+./terraform $action -var access_key=$AWS_ACCESS_KEY_ID -var secret_key=$AWS_SECRET_ACCESS_KEY -var region=$region $directory
 
-echo &apos;end of Packer Build AMI ;&apos;
+
+
+echo &apos;end of Terraform Build;&apos;
 ls -la
 
 
