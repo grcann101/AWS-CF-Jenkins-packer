@@ -7,6 +7,12 @@
 
 *.pdf 
 
+# tf
+
+terraform.*
+.terraform
+
+
 ## Certificate Authority
 *.ca
 

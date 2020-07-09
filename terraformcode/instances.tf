@@ -22,7 +22,7 @@ provider "aws" {
 resource "aws_instance" "rancher-instance-1" { # end of resource block
   ami           = var.rancher-ami
   instance_type = var.rancher-type
-  subnet_id     = aws_subnet.rancher-a.id
+  subnet_id     =  data.aws_subnet.subnets-aza.id
   key_name      = var.rancher-key
   security_groups             = [module.server_sg.this_security_group_id]
   iam_instance_profile        = var.rancher-iam
@@ -43,85 +43,3 @@ output "ip1" { # output the IP address of the instance for use in the rke file
   value = aws_instance.rancher-instance-1.public_ip
 }
 
-#=================================AZ-1b==============================================
-#-------------------------------------------------------------------------------
-# create aws instance from the rancheros ami other ami  ami-1686b3fd
-#-------------------------------------------------------------------------------
-
-resource "aws_instance" "rancher-instance-2" { # end of resource block
-  ami           = var.rancher-ami
-  instance_type = var.rancher-type
-  subnet_id     = aws_subnet.rancher-b.id
-  key_name      = var.rancher-key
-  security_groups             = [module.server_sg.this_security_group_id]
-  iam_instance_profile        = var.rancher-iam
-  associate_public_ip_address = true
-
-  tags = {
-    Name        = var.label-az2
-    Owner       = "PlatOps Team"
-    cost-centre = "IT Developement"
-    "kubernetes.io/cluster/local" = "owned"
-    "failure-domain.beta.kubernetes.io/zone" = "eu-west-1b"
-    "failure-domain.beta.kubernetes.io/region" = "eu-west-1"
-  }
-
-}
-
-output "ip2" { # output the IP address of the instance for use in the rke file
-  value = aws_instance.rancher-instance-2.public_ip
-}
-
-#=================================AZ-1c==============================================
-#-------------------------------------------------------------------------------
-# create aws instance from the rancheros ami other ami  ami-1686b3fd
-#-------------------------------------------------------------------------------
-
-resource "aws_instance" "rancher-instance-3" { # end of resource block
-  ami           = var.rancher-ami
-  instance_type = var.rancher-type
-  subnet_id     = aws_subnet.rancher-c.id
-  key_name      = var.rancher-key
-  security_groups             = [module.server_sg.this_security_group_id]
-  iam_instance_profile        = var.rancher-iam
-  associate_public_ip_address = true
-
-  tags = {
-    Name        = var.label-az3
-    Owner       = "PlatOps Team"
-    cost-centre = "IT Developement"
-    "kubernetes.io/cluster/local" = "owned"
-    "failure-domain.beta.kubernetes.io/zone" = "eu-west-1c"
-    "failure-domain.beta.kubernetes.io/region" = "eu-west-1"
-  }
-
-}
-
-output "ip3" { # output the IP address of the instance for use in the rke file
-  value = aws_instance.rancher-instance-3.public_ip
-}
-#=================================AZ-1c==Bastion============================================
-#-------------------------------------------------------------------------------
-# create aws bastion instance from the rancheros ami CIS hardened AMI
-#-------------------------------------------------------------------------------
-
-resource "aws_instance" "rancher-bastion-london" { # end of resource block
-  ami           = var.rancher-bastion-ami
-  instance_type = var.rancher-type
-  subnet_id     = aws_subnet.rancher-c.id
-  key_name      = var.rancher-key
-  security_groups             = [module.server_sg.this_security_group_id]
-  iam_instance_profile        = var.rancher-iam
-  associate_public_ip_address = true
-
-  tags = {
-    Name        = "Bastion-London"
-    Owner       = "PlatOps Team"
-    cost-centre = "IT Developement"
-  }
-
-}
-
-output "ip-bastion" { # output the IP address of the instance for use in the rke file
-  value = aws_instance.rancher-bastion-london.public_ip
-}
