@@ -1,0 +1,116 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<project>
+  <actions/>
+  <description></description>
+  <keepDependencies>false</keepDependencies>
+  <properties>
+    <hudson.model.ParametersDefinitionProperty>
+      <parameterDefinitions>
+        <hudson.model.StringParameterDefinition>
+          <name>build_script</name>
+          <description></description>
+          <defaultValue>lamp-install-script.sh</defaultValue>
+          <trim>true</trim>
+        </hudson.model.StringParameterDefinition>
+      </parameterDefinitions>
+    </hudson.model.ParametersDefinitionProperty>
+  </properties>
+  <scm class="hudson.plugins.git.GitSCM" plugin="git@4.3.0">
+    <configVersion>2</configVersion>
+    <userRemoteConfigs>
+      <hudson.plugins.git.UserRemoteConfig>
+        <url>git@github.com:grcann101/AWS-CF-Jenkins-packer.git</url>
+        <credentialsId>08c3b6f0-fd76-40ad-870a-5bcb7eca35b6</credentialsId>
+      </hudson.plugins.git.UserRemoteConfig>
+    </userRemoteConfigs>
+    <branches>
+      <hudson.plugins.git.BranchSpec>
+        <name>*/master</name>
+      </hudson.plugins.git.BranchSpec>
+    </branches>
+    <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
+    <submoduleCfg class="list"/>
+    <extensions/>
+  </scm>
+  <canRoam>true</canRoam>
+  <disabled>false</disabled>
+  <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
+  <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
+  <triggers/>
+  <concurrentBuild>false</concurrentBuild>
+  <builders>
+    <hudson.tasks.Shell>
+      <command>ls -la ;
+which packer;
+#!/usr/bin/env bash
+
+# Select Jenkins free form project then add these steps
+# check box this build is parameterized   setup parameter build_script
+# check box SCM GIT add repo and setup access key in github
+# check box Build Environment  use secret text or files and add AWS keys
+# Build step copy this code into the build step box type execute Shell script
+
+
+# Install JQ
+
+if [ -f &quot;/usr/bin/jq&quot; ]; then
+    echo &quot;jq exists.&quot;
+else
+    wget -O jq https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64
+    sudo chmod +x ./jq
+    sudo cp jq /usr/bin
+fi
+# Get URLs for most recent versions
+# For Linux
+
+terraform_url=$(curl https://releases.hashicorp.com/index.json | jq &apos;{terraform}&apos; | egrep &quot;linux.*amd64&quot; | sort --version-sort -r | head -1 | awk -F[\&quot;] &apos;{print $4}&apos;)
+packer_url=$(curl https://releases.hashicorp.com/index.json | jq &apos;{packer}&apos; | egrep &quot;linux.*amd64&quot; | sort --version-sort -r | head -1 | awk -F[\&quot;] &apos;{print $4}&apos;)
+
+
+
+# Download Terraform. URI: https://www.terraform.io/downloads.html
+if [ -f &quot;./terraform&quot; ]; then
+    echo &quot;terraform exists.&quot;
+else
+    echo &quot;Downloading $terraform_url.&quot;
+        curl -o terraform.zip $terraform_url
+        # Unzip and install
+        unzip terraform.zip
+fi
+
+if [ -f &quot;./packer&quot; ]; then
+    echo &quot;packer exists.&quot;
+else
+    # Download Packer. URI: https://www.packer.io/downloads.html
+    echo &quot;Downloading $packer_url.&quot;
+    curl -o packer.zip $packer_url
+    # Unzip and install
+    unzip packer.zip
+fi
+
+export PACKER_LOG=1;
+export PACKER_LOG_PATH=$WORKSPACE/packer.log;
+echo &quot;packer log path:&quot; $PACKER_LOG_PATH;
+sudo ./packer -machine-readable version ;
+sudo ./packer build -var aws_access_key=$AWS_ACCESS_KEY_ID -var aws_secret_key=$AWS_SECRET_ACCESS_KEY -var packer_build_script=$build_script ./packer.json ;
+echo &apos;end of run;&apos;
+ls -la
+
+
+
+
+</command>
+    </hudson.tasks.Shell>
+  </builders>
+  <publishers/>
+  <buildWrappers>
+    <org.jenkinsci.plugins.credentialsbinding.impl.SecretBuildWrapper plugin="credentials-binding@1.23">
+      <bindings>
+        <com.cloudbees.jenkins.plugins.awscredentials.AmazonWebServicesCredentialsBinding plugin="aws-credentials@1.28">
+          <credentialsId>aws_creds</credentialsId>
+          <accessKeyVariable>AWS_ACCESS_KEY_ID</accessKeyVariable>
+          <secretKeyVariable>AWS_SECRET_ACCESS_KEY</secretKeyVariable>
+        </com.cloudbees.jenkins.plugins.awscredentials.AmazonWebServicesCredentialsBinding>
+      </bindings>
+    </org.jenkinsci.plugins.credentialsbinding.impl.SecretBuildWrapper>
+  </buildWrappers>
