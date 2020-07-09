@@ -15,16 +15,16 @@ aws cloudformation validate-template --template-body file://cf-jenkins-server-st
 
 ## -create stack --------------------
 ```
-aws cloudformation create-stack --stack-name jenkins --template-body file://cf-jenkins-server-stack.yml --parameters  file://jenkins.json --capabilities CAPABILITY_IAM 
+aws cloudformation create-stack --stack-name jenkins --template-body file://cf-jenkins-server-stack.yml --parameters  file://jenkins-parameters.json --capabilities CAPABILITY_IAM 
 ```
 ## -change set --------------------
 ```
-aws cloudformation create-change-set --change-set-name secgroup --stack-name jenkins --template-body file://cf-jenkins-server-stack.yml --parameters  file://jenkins.json --capabilities CAPABILITY_IAM 
+aws cloudformation create-change-set --change-set-name secgroup --stack-name jenkins --template-body file://cf-jenkins-server-stack.yml --parameters  file://jenkins-parameters.json --capabilities CAPABILITY_IAM 
 ```
 
 ## -update stack --------------------
 ```
-aws cloudformation update-stack --stack-name jenkins --template-body file://cf-jenkins-server-stack.yml --parameters  file://jenkins.json --capabilities CAPABILITY_IAM 
+aws cloudformation update-stack --stack-name jenkins --template-body file://cf-jenkins-server-stack.yml --parameters  file://jenkins-parameters.json --capabilities CAPABILITY_IAM 
 ```
 
 # Files
@@ -33,7 +33,7 @@ aws cloudformation update-stack --stack-name jenkins --template-body file://cf-j
 |File |Description |  
 | --- | --- | 
 |cf-jenkins-server-stack.yml | CF code to build service | 
-|jenkins.json | CF Parameters for the above stack | 
+|jenkins-parameters.json | CF Parameters for the above stack | 
 |packer.json | Packer Command to build the AMI | 
 |lamp-install-script.sh | Software install for the LAMP stack | 
 |jenkins-pipe-packer-go | Jenkins pipeline to Run the build |
