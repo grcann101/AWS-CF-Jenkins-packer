@@ -2,7 +2,7 @@
 AWSTemplateFormatVersion: 2010-09-09
 
 Description: >
-  This template provides the resources for the Corp SCP Server
+  This template provides the resources to build a jenkins master server on EC2 
 
 Parameters:
 
@@ -11,7 +11,7 @@ Parameters:
 
   SCPUSER:
     Type: "AWS::SSM::Parameter::Value<String>"
-    Default: netop-scp-user
+    Default: jenkins-admin-user
     NoEcho: true
 
   SSHKeyName: 
@@ -44,7 +44,7 @@ Parameters:
     Type: "List<AWS::EC2::Subnet::Id>"
 
   EC2Name:
-    Description: The Name Tag for the EC2 instance.  EG euw1lsscp01
+    Description: The Name Tag for the EC2 instance.  EG euw1ljen01
     Type: String
     Default: "euw1l***"
   
@@ -56,7 +56,7 @@ Parameters:
   prefixname:
     Description: The Name Tag for the EC2 Security Group. EG pi-ec2-cse-sftp
     Type: String
-    Default: "itnw-scp"
+    Default: "itnw-jen"
 
   VolumeName:
     Description: The name to be used for the EFS volume
@@ -90,7 +90,7 @@ Metadata:
           - Environment
       -
         Label: 
-          default: "SCP Users"
+          default: "Jenkins Users"
         Parameters: 
           - CiscoCUCMUser
           - SCPUser
@@ -472,21 +472,9 @@ Resources:
       AWS::CloudFormation::Init:
         configSets:
           install_all:
-            - create_users
-            - configure_users
-            - configure_sshd
             - configure_jenkins
             - configure_efs
             - configure_git
-        create_users:
-          A-add-user:
-              users: 
-               scp-user 
-          commands:
-            B-set-pwd:
-              command: "echo $SCPPWD | passwd scp-user --stdin"
-              env: 
-                SCPPWD: !Ref "SCPUSER"
         configure_efs:
           commands:
             A-display-fs:
@@ -498,22 +486,6 @@ Resources:
               waitAfterCompletion: 60
             C-start_jenkins:
                 command:  "service jenkins start ; df -h "
-        configure_sshd:
-          commands:
-            A-configure_sshd:
-              command: "echo 'PasswordAuthentication yes' >> /etc/ssh/sshd_config" 
-            B-remove-password-no_sshd:
-              command: "sed -i 's/PasswordAuthentication no/#PasswordAuthentication no/g' /etc/ssh/sshd_config"
-            C-restart_ssh:
-              command: "service sshd restart"
-        configure_users:
-          commands:
-            A-create_dir:
-              command: "mkdir /scp"
-            B-chroot_users:
-              command: "chown 'scp-user' /scp"
-            C-folder_permissions:
-              command: "chmod 777 /home/scp-user"
         configure_jenkins:
           commands:
             A-create_setuprepo:
@@ -550,7 +522,6 @@ Resources:
             #!/bin/bash -xe
             yum update -y
             yum install -y amazon-efs-utils
-            useradd scp-user
             /opt/aws/bin/cfn-init --stack ${AWS::StackId} --resource LaunchConfig --configsets install_all --region ${AWS::Region} 
 
 ########################### output variables ##############################

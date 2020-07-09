@@ -10,7 +10,7 @@
 
 ## -validate----------
 ```
-aws cloudformation validate-template --template-body file://F:\AWS\jenkins-server\cf-jenkins-server-stack.yml
+aws cloudformation validate-template --template-body file://cf-jenkins-server-stack.yml
 ```
 
 ## -create stack --------------------
